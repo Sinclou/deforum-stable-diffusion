@@ -182,7 +182,7 @@ def render_animation(args, anim_args, animation_prompts, root):
     args.n_samples = 1
     frame_idx = start_frame
     while frame_idx < anim_args.max_frames:
-        print(f"Rendering animation frame {frame_idx} of {anim_args.max_frames}")
+        print(f"TEST Rendering animation frame {frame_idx} of {anim_args.max_frames}")
         noise = keys.noise_schedule_series[frame_idx]
         strength = keys.strength_schedule_series[frame_idx]
         contrast = keys.contrast_schedule_series[frame_idx]
