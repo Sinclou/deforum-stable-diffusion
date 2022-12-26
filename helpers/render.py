@@ -105,7 +105,7 @@ def render_image_batch(args, prompts, root):
             display.display(grid_image)
 
 
-def render_animation(args, anim_args, animation_prompts, root):
+def render_animation(args, anim_args, animation_prompts, root, cadences_anim):
     # animations use key framed prompts
     args.prompts = animation_prompts
 
@@ -188,6 +188,9 @@ def render_animation(args, anim_args, animation_prompts, root):
         contrast = keys.contrast_schedule_series[frame_idx]
         depth = None
         
+        if frame_idx in cadences_anim.keys():
+            turbo_steps = cadences_anim[frame_idx]
+            print(f"cadence change:{turbo_steps}")
         # emit in-between frames
         if turbo_steps > 1:
             tween_frame_start_idx = max(0, frame_idx-turbo_steps)
