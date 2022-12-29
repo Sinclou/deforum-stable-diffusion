@@ -188,9 +188,15 @@ def render_animation(args, anim_args, animation_prompts, root, cadences_anim):
         contrast = keys.contrast_schedule_series[frame_idx]
         depth = None
         
-        if frame_idx in cadences_anim.keys():
-            turbo_steps = cadences_anim[frame_idx]
-            print(f"cadence change:{turbo_steps}")
+        prev_frames = range(frame_idx-turbo_steps, frame_idx)
+        #print(f'prev frames{prev_frames}')
+        prev_keyframes = [key for key in prev_frames if key in cadences_anim.keys()]
+        #print(f'prev key frames{prev_keyframes}')
+
+        if len(prev_keyframes) > 0:
+            turbo_steps = cadences_anim[prev_keyframes[-1]]
+            print(f'changed cadence to {turbo_steps}') 
+            
         # emit in-between frames
         if turbo_steps > 1:
             tween_frame_start_idx = max(0, frame_idx-turbo_steps)
