@@ -18,7 +18,13 @@ from .depth import DepthModel
 from .colors import maintain_colors
 from .load_images import prepare_overlay_mask
 
-def next_seed(args):
+def next_seed(args, frame_idx):
+    print(f"frame:{frame_idx}")
+    if frame_idx in seeds.keys():
+      print("keyframe seed !")
+      args.seed = seeds[frame_idx]
+      return args.seed
+
     if args.seed_behavior == 'iter':
         args.seed += 1
     elif args.seed_behavior == 'fixed':
@@ -92,7 +98,7 @@ def render_image_batch(args, prompts, root):
                     if args.display_samples:
                         display.display(image)
                     index += 1
-                args.seed = next_seed(args)
+                args.seed = next_seed(args,0)
 
         #print(len(all_images))
         if args.make_grid:
@@ -337,7 +343,7 @@ def render_animation(args, anim_args, animation_prompts, root, cadences_anim):
         display.clear_output(wait=True)
         display.display(image)
 
-        args.seed = next_seed(args)
+        args.seed = next_seed(args,frame_idx)
 
 def render_input_video(args, anim_args, animation_prompts, root):
     # create a folder for the video input frames to live in
@@ -399,7 +405,7 @@ def render_interpolation(args, anim_args, animation_prompts, root):
         # display.clear_output(wait=True)
         display.display(image)
       
-        args.seed = next_seed(args)
+        args.seed = next_seed(args,0)
 
     display.clear_output(wait=True)
     print(f"Interpolation start...")
@@ -430,7 +436,7 @@ def render_interpolation(args, anim_args, animation_prompts, root):
                 display.clear_output(wait=True)
                 display.display(image)
 
-                args.seed = next_seed(args)
+                args.seed = next_seed(args,frame_idx)
 
     else:
         for i in range(len(prompts_c_s)-1):
@@ -451,7 +457,7 @@ def render_interpolation(args, anim_args, animation_prompts, root):
                 display.clear_output(wait=True)
                 display.display(image)
 
-                args.seed = next_seed(args)
+                args.seed = next_seed(args,frame_idx)
 
     # generate the last prompt
     args.init_c = prompts_c_s[-1]
@@ -462,7 +468,7 @@ def render_interpolation(args, anim_args, animation_prompts, root):
 
     display.clear_output(wait=True)
     display.display(image)
-    args.seed = next_seed(args)
+    args.seed = next_seed(args,frame_idx)
 
     #clear init_c
     args.init_c = None
